@@ -5,25 +5,52 @@ This document covers how we work with Git, GitHub, and Jira.
 
 ---
 
+## Branch Flow
+
+```
+feat/KAN-48-navbar  ─┐
+feat/KAN-49-hero    ─┤──▶  dev  ──▶  main (production)
+feat/KAN-50-cta     ─┘
+```
+
+**How it works:**
+
+- All feature branches are created from `dev` and merged back into `dev` via PR.
+- `dev` is the default branch on GitHub — all PRs target it automatically.
+- `main` is protected — no direct pushes. Only a `dev → main` PR can merge into it.
+- When the page/feature is ready to ship, the lead opens one PR: `dev → main`, which triggers the production deploy.
+
+**Why this matters:**
+
+- You can merge multiple features into `dev` throughout the day and test them together.
+- `main` always reflects what's actually live — never broken, never a work in progress.
+- If something in `dev` needs to be pulled back, it stays in `dev` and never reaches users.
+
+**Rule for interns:** Always branch from `dev`. Never branch from `main`.
+
+---
+
 ## Branch Naming
 
-Always create a new branch from `main` (or `dev` if the project uses it).
-Never work directly on `main`.
+Always create a new branch from `dev`.
+Never work directly on `main` or `dev`.
 
 **Format:**
+
 ```
 {type}/KAN-{number}-short-description
 ```
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature or UI section |
-| `fix` | Bug fix or correction |
-| `chore` | Non-code changes (configs, assets, copy) |
-| `refactor` | Code restructure with no behaviour change |
-| `hotfix` | Urgent fix that goes directly to production |
+| Type       | When to use                                 |
+| ---------- | ------------------------------------------- |
+| `feat`     | New feature or UI section                   |
+| `fix`      | Bug fix or correction                       |
+| `chore`    | Non-code changes (configs, assets, copy)    |
+| `refactor` | Code restructure with no behaviour change   |
+| `hotfix`   | Urgent fix that goes directly to production |
 
 **Examples:**
+
 ```
 feat/KAN-48-enquiry-form-layout
 fix/KAN-44-capitalize-menu-items
@@ -35,11 +62,13 @@ chore/KAN-41-logo-footer-update
 ## Commit Messages
 
 **Format:**
+
 ```
 KAN-{number}: short description in imperative mood
 ```
 
 **Examples:**
+
 ```
 KAN-48: add enquiry form to contact section
 KAN-44: capitalize all nav menu items
@@ -47,6 +76,7 @@ KAN-47: fix missing tiles in engineering success section
 ```
 
 If you need more context, add a body after a blank line:
+
 ```
 KAN-47: fix missing tiles in engineering success section
 
@@ -55,6 +85,7 @@ KAN-47: fix missing tiles in engineering success section
 ```
 
 **Rules:**
+
 - Start with the Jira ticket ID — always
 - Use imperative mood: "add", "fix", "update" — not "added", "fixing"
 - Keep the first line under 72 characters
@@ -68,6 +99,7 @@ This is how we track what code belongs to what task.
 ## Pull Requests
 
 **Title format:**
+
 ```
 [KAN-{number}] Short description of what was done
 ```
@@ -76,20 +108,25 @@ This is how we track what code belongs to what task.
 
 ```markdown
 ## Jira
+
 [KAN-XX](https://your-domain.atlassian.net/browse/KAN-XX)
 
 ## What changed
-- 
+
+-
 
 ## How to test
-1. 
-2. 
+
+1.
+2.
 
 ## Screenshots
+
 (attach if there are any UI changes)
 ```
 
 **Rules:**
+
 - One Jira ticket = one PR (don't bundle multiple tickets)
 - Always request a review before merging — don't merge your own PR
 - Attach screenshots for any visible UI change
@@ -103,11 +140,11 @@ Move your ticket through these stages as you work:
 
 **To Do → In Progress → In Review → Done**
 
-| Stage | When to move |
-|---|---|
-| In Progress | When you start the branch |
-| In Review | When the PR is raised |
-| Done | Only after the PR is merged |
+| Stage       | When to move                |
+| ----------- | --------------------------- |
+| In Progress | When you start the branch   |
+| In Review   | When the PR is raised       |
+| Done        | Only after the PR is merged |
 
 Do not mark a ticket Done just because you raised the PR.
 
@@ -118,6 +155,7 @@ Do not mark a ticket Done just because you raised the PR.
 We use a `commit-msg` hook to block commits that don't follow the format.
 
 **Setup — run once per repo clone:**
+
 ```bash
 git config core.hooksPath .githooks
 ```
@@ -130,8 +168,8 @@ If your commit doesn't start with `KAN-{number}:`, it will be rejected with an e
 ## Quick Reference
 
 ```bash
-# Start a new task
-git checkout main && git pull
+# Start a new task — always branch from dev
+git checkout dev && git pull
 git checkout -b feat/KAN-48-enquiry-form-layout
 
 # Commit your work
@@ -148,6 +186,7 @@ git push origin feat/KAN-48-enquiry-form-layout
 ## Definition of Done
 
 A task is **Done** only when:
+
 - [ ] PR is approved by the lead
 - [ ] PR is merged into `main` or `dev`
 - [ ] No console errors or lint warnings introduced

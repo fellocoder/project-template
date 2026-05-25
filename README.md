@@ -104,19 +104,21 @@ Never commit `.env.local`. It is already in `.gitignore`.
 
 ## Branching & Commits
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full Git + Jira workflow.
+**Flow:** `feat/*` → `dev` → `main` (production)
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full Git + Jira workflow, including a plain-English explanation of why branches work this way.
 
 Quick reference:
 
 ```bash
-# Start a new task
-git checkout main && git pull
+# Start a new task — always branch from dev
+git checkout dev && git pull
 git checkout -b feat/KAN-48-short-description
 
 # Commit
 git commit -m "KAN-48: add enquiry form to contact section"
 
-# Push and open PR on GitHub
+# Push and open PR → targets dev automatically
 git push origin feat/KAN-48-short-description
 ```
 
