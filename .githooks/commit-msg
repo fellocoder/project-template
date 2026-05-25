@@ -1,0 +1,26 @@
+#!/bin/sh
+# .githooks/commit-msg
+# Enforces commit message format: KAN-{number}: description
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Allow merge commits and fixup commits through
+if echo "$COMMIT_MSG" | grep -qE "^(Merge|fixup!|squash!)"; then
+  exit 0
+fi
+
+# Check format: KAN-{number}: description
+if ! echo "$COMMIT_MSG" | grep -qE "^KAN-[0-9]+: .+"; then
+  echo ""
+  echo "❌ Commit rejected: message doesn't follow the required format."
+  echo ""
+  echo "   Expected: KAN-{number}: short description"
+  echo "   Example:  KAN-48: add enquiry form to contact section"
+  echo ""
+  echo "   Your message: $COMMIT_MSG"
+  echo ""
+  exit 1
+fi
+
+exit 0
