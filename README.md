@@ -21,8 +21,8 @@
 ### 1. Clone the template and strip git history
 
 ```bash
-git clone git@github.com:{GITHUB_ORG}/{TEMPLATE_REPO}.git {REPO_SLUG}
-cd {REPO_SLUG}
+git clone git@github.com:fellocoder/project-template.git [repo-slug]
+cd [repo-slug]
 rm -rf .git
 git init
 git checkout -b main
@@ -62,7 +62,7 @@ npm run dev   # confirm app loads at localhost:3000
 git add .
 git commit -m "KAN-1: initial project setup from template"
 
-gh repo create {GITHUB_ORG}/{REPO_SLUG} --private --source=. --remote=origin --push
+gh repo create fellocoder/[repo-slug] --private --source=. --remote=origin --push
 ```
 
 ### 5. Lead setup checklist
