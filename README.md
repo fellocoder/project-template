@@ -13,6 +13,71 @@
 
 ---
 
+## For Leads: Setting Up This Repo for a New Client
+
+> This section is for whoever is creating the project repo from this template.
+> Interns: skip to [Getting Started](#getting-started).
+
+### 1. Clone the template and strip git history
+
+```bash
+git clone git@github.com:{GITHUB_ORG}/{TEMPLATE_REPO}.git {REPO_SLUG}
+cd {REPO_SLUG}
+rm -rf .git
+git init
+git checkout -b main
+```
+
+### 2. Replace all placeholders
+
+Find and replace across all files:
+
+| Placeholder | Replace with |
+|---|---|
+| `[Client Name]` | Actual client name |
+| `[repo-name]` | Actual repo slug |
+| `your-domain.atlassian.net` | Fellocoder's Jira domain |
+
+Files to update: `README.md`, `CONTRIBUTING.md`.
+
+### 3. Make the hook executable and verify
+
+```bash
+chmod +x .githooks/commit-msg
+git config core.hooksPath .githooks
+
+# This should be REJECTED
+git commit --allow-empty -m "test commit"
+
+# This should PASS
+git commit --allow-empty -m "KAN-1: initial project setup"
+```
+
+### 4. Install, run, initial commit, push
+
+```bash
+npm install
+npm run dev   # confirm app loads at localhost:3000
+
+git add .
+git commit -m "KAN-1: initial project setup from template"
+
+gh repo create {GITHUB_ORG}/{REPO_SLUG} --private --source=. --remote=origin --push
+```
+
+### 5. Lead setup checklist
+
+- [ ] No `[Client Name]` or `[repo-name]` placeholders remain anywhere
+- [ ] `.env.local` exists and is not committed
+- [ ] `core.hooksPath` is set to `.githooks`
+- [ ] Hook rejects bad messages, passes `KAN-*` format
+- [ ] `npm run dev` runs without errors
+- [ ] GitHub repo is **private**
+- [ ] One clean initial commit on `main`
+- [ ] Remote `origin` points to the correct repo
+
+---
+
 ## Getting Started
 
 ### 1. Clone the repo
@@ -21,6 +86,8 @@
 git clone git@github.com:fellocoder/[repo-name].git
 cd [repo-name]
 ```
+
+> **Note:** After cloning you are on `main`. All your work branches off `dev` — switch to `dev` before creating any feature branch. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full branching guide.
 
 ### 2. Install dependencies
 
@@ -34,15 +101,28 @@ npm install
 cp .env.example .env.local
 ```
 
-Open `.env.local` and fill in the values. Ask your lead for the actual secrets — never commit real values.
+Do NOT fill in any real values yourself. Leave `.env.local` as-is — your lead will share the actual secrets separately. Never commit this file.
 
 ### 4. Set up Git hooks (run once per clone)
 
 ```bash
+chmod +x .githooks/commit-msg
 git config core.hooksPath .githooks
 ```
 
 This enables the commit message format check. Your commits will be rejected if they don't follow the format.
+
+**Verify it's working (run these after the above):**
+
+```bash
+# This should be REJECTED
+git commit --allow-empty -m "test commit"
+
+# This should PASS
+git commit --allow-empty -m "KAN-1: initial project setup"
+```
+
+If the first commit is not rejected, the hook is not active — stop and ask your lead.
 
 ### 5. Run the dev server
 
@@ -51,6 +131,16 @@ npm run dev
 ```
 
 App runs at [http://localhost:3000](http://localhost:3000)
+
+### Setup checklist — confirm before starting work
+
+- [ ] `npm install` ran with no errors
+- [ ] `.env.local` exists and is not committed (`git status` should not show it)
+- [ ] `core.hooksPath` is set to `.githooks`
+- [ ] Hook rejects a bad commit and passes a `KAN-*` formatted commit
+- [ ] `npm run dev` runs at http://localhost:3000 with no errors
+
+If any item fails, stop and ask your lead before starting any tasks.
 
 ---
 
